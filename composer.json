@@ -2,5 +2,8 @@
 	"name": "spaze/bare-next",
 	"require": {
 		"nette/nette": "2.0.*"
+	},
+	"autoload": {
+		"psr-0": {"Bare\Next": "Bare/Next"}
 	}
 }

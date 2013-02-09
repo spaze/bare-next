@@ -1,6 +1,6 @@
 {
-    "name": "spaze/bare-next",
-    "require": {
-        "nette/nette": "2.0.*"
-    }
+	"name": "spaze/bare-next",
+	"require": {
+		"nette/nette": "2.0.*"
+	}
 }

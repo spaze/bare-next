@@ -23,6 +23,10 @@ class Texy
 	 */
 	public function format($text)
 	{
+		if (empty($text)) {
+			return $text;
+		}
+
 		$cache = new \Nette\Caching\Cache($this->cacheStorage, self::TEXY_NAMESPACE);
 
 		// Nette Cache itself generates the key by hashing the key passed in load() so we can use whatever we want

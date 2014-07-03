@@ -31,7 +31,9 @@ class Helpers extends \Nette\Object
 	public function loader($helper)
 	{
 		if (method_exists($this, $helper)) {
-			return callback($this, $helper);
+			return call_user_func_array([$this, $helper], array_slice(func_get_args(), 1));
+		} else {
+			return null;
 		}
 	}
 

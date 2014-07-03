@@ -1,7 +1,8 @@
 {
 	"name": "spaze/bare-next",
 	"require": {
-		"nette/nette": ">= 2.2.0"
+		"nette/nette": ">= 2.2.0",
+		"dg/texy": "2.6.0"
 	},
 	"autoload": {
 		"psr-0": {"Bare\\Next": "lib"}

@@ -52,4 +52,10 @@ class Helpers extends \Nette\Object
 	}
 
 
+	public function count($a)
+	{
+		return count($a);
+	}
+
+
 }

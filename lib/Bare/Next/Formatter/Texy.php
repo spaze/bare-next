@@ -6,9 +6,7 @@ class Texy
 
 	const TEXY_NAMESPACE = 'TexyFormatted';
 
-	/**
-	 * @var Nette\Caching\IStorage
-	 */
+	/** @var Nette\Caching\IStorage */
 	protected $cacheStorage;
 
 

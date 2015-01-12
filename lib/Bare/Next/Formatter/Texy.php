@@ -6,6 +6,9 @@ class Texy
 
 	const TEXY_NAMESPACE = 'TexyFormatted';
 
+	/** @var array $event => $callback */
+	private $handlers = array();
+
 	/** @var Nette\Caching\IStorage */
 	protected $cacheStorage;
 
@@ -24,17 +27,20 @@ class Texy
 		$texy = new \Texy();
 		$texy->encoding = 'utf-8';
 		$texy->allowedTags = \Texy::NONE;
-		$this->addHandlers($texy);
+		foreach ($this->handlers as $event => $callback) {
+			$texy->addHandler($event, $callback);
+		}
 		return $texy;
 	}
 
 
 	/**
-	 * @param \Texy $texy
+	 * @param string $event
+	 * @param callable $callback
 	 */
-	protected function addHandlers(\Texy $texy)
+	protected function addHandler($event, $callback)
 	{
-		// Intentionally empty, ready to override
+		$this->handlers = array_merge($this->handlers, [$event => $callback]);
 	}
 
 

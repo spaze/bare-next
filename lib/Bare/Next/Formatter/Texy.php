@@ -60,7 +60,7 @@ class Texy
 			$texy = $this->getTexy();
 			return preg_replace('~^\s*<p[^>]*>(.*)</p>\s*$~s', '$1', $texy->process($text));
 		});
-		return \Nette\Utils\Html::el()->setHtml($formatted);;
+		return \Nette\Utils\Html::el()->setHtml($formatted);
 	}
 
 

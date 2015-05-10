@@ -35,7 +35,7 @@ class CsvResponse extends \Nette\Object implements \Nette\Application\IResponse
 
 	/** @var bool */
 	public $addHeading;
-	
+
 	/** @var string */
 	public $glue;
 
@@ -106,7 +106,7 @@ class CsvResponse extends \Nette\Object implements \Nette\Application\IResponse
 	public function send(\Nette\Http\IRequest $httpRequest, \Nette\Http\IResponse $httpResponse)
 	{
 		$httpResponse->setContentType($this->contentType, $this->charset);
-		
+
 		if (empty($this->name)) {
 			$httpResponse->setHeader('Content-Disposition', 'attachment');
 		} else {
@@ -114,7 +114,7 @@ class CsvResponse extends \Nette\Object implements \Nette\Application\IResponse
 		}
 
 		$data = $this->formatCsv();
-		
+
 		$httpResponse->setHeader('Content-Length', strlen($data));
 		echo $data;
 	}
@@ -125,33 +125,33 @@ class CsvResponse extends \Nette\Object implements \Nette\Application\IResponse
 		if (empty($this->data)) {
 			return '';
 		}
-	
+
 		$csv = $this->initialData;
-		
+
 		if (!is_array($this->data)) {
 			$this->data = iterator_to_array($this->data);
 		}
-	
+
 		if ($this->addHeading) {
 			$firstRow = reset($this->data);
 			if (!is_array($firstRow)) {
 				$firstRow = iterator_to_array($firstRow);
 			}
-			
+
 			$labels = array();
 			foreach (array_keys($firstRow) as $key) {
 				$labels[] = ucwords(str_replace('_', ' ', $key));
-			} 
+			}
 			$csv .= $this->formatRow($labels);
 		}
-	
+
 		foreach ($this->data as $row) {
 			if (!is_array($row)) {
 				$row = iterator_to_array($row);
 			}
 			$csv .= $this->formatRow($row);
 		}
-	
+
 		return $csv;
 	}
 

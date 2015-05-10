@@ -1,5 +1,5 @@
 <?php
-namespace Bare\Next\Forms\Controls;
+namespace Netxten\Forms\Controls;
 
 /**
  * Hidden form control used to store a non-displayed value but with label and optional text

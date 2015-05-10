@@ -1,4 +1,4 @@
-bare-next
-=========
+netxten
+=======
 
-Bare Nette Framework Extensions
+Nette Framework Extensions

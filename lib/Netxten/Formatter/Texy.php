@@ -1,5 +1,5 @@
 <?php
-namespace Bare\Next\Formatter;
+namespace Netxten\Formatter;
 
 class Texy
 {

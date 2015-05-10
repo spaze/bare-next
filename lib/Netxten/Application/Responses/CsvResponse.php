@@ -1,5 +1,5 @@
 <?php
-namespace Bare\Next\Application\Responses;
+namespace Netxten\Application\Responses;
 
 
 /**

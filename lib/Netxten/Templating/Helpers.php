@@ -1,5 +1,5 @@
 <?php
-namespace Bare\Next\Templating;
+namespace Netxten\Templating;
 
 class Helpers extends \Nette\Object
 {

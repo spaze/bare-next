@@ -40,7 +40,7 @@ class Helpers extends \Nette\Object
 
 	public function localDate($time, $language, $format = null)
 	{
-		$time = \Nette\DateTime::from($time);
+		$time = \Nette\Utils\DateTime::from($time);
 
 		$replace = array();
 		foreach ($this->localDateSubstitution as $key => $value) {
@@ -48,7 +48,7 @@ class Helpers extends \Nette\Object
 			$replace[$key] = str_replace('%', '%%', $this->localDateFormat[$language][$value][$substituted]);
 		}
 
-		return \Nette\Templating\Helpers::date($time, strtr($format, $replace));
+		return \Latte\Runtime\Filters::date($time, strtr($format, $replace));
 	}
 
 

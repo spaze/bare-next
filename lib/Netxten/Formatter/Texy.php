@@ -20,13 +20,13 @@ class Texy
 
 
 	/**
-	 * @return \Texy
+	 * @return \Texy\Texy
 	 */
 	protected function getTexy()
 	{
-		$texy = new \Texy();
+		$texy = new \Texy\Texy();
 		$texy->encoding = 'utf-8';
-		$texy->allowedTags = \Texy::NONE;
+		$texy->allowedTags = $texy::NONE;
 		foreach ($this->handlers as $event => $callback) {
 			$texy->addHandler($event, $callback);
 		}

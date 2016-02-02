@@ -4,7 +4,11 @@ namespace Netxten\Formatter;
 class Texy
 {
 
-	const TEXY_NAMESPACE = 'TexyFormatted';
+	/** @var string */
+	const DEFAULT_NAMESPACE = 'TexyFormatted';
+
+	/** @var string */
+	private $namespace;
 
 	/** @var array $event => $callback */
 	private $handlers = array();
@@ -13,9 +17,10 @@ class Texy
 	protected $cacheStorage;
 
 
-	public function __construct(\Nette\Caching\IStorage $cacheStorage)
+	public function __construct(\Nette\Caching\IStorage $cacheStorage, $namespace = self::DEFAULT_NAMESPACE)
 	{
 		$this->cacheStorage = $cacheStorage;
+		$this->namespace = $namespace;
 	}
 
 
@@ -53,7 +58,7 @@ class Texy
 			return $text;
 		}
 
-		$cache = new \Nette\Caching\Cache($this->cacheStorage, self::TEXY_NAMESPACE);
+		$cache = new \Nette\Caching\Cache($this->cacheStorage, $this->namespace);
 
 		// Nette Cache itself generates the key by hashing the key passed in load() so we can use whatever we want
 		$formatted = $cache->load($text, function() use ($text) {

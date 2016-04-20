@@ -50,22 +50,46 @@ class Texy
 
 
 	/**
+	 * @var string
+	 * @var callable
 	 * @return \Nette\Utils\Html
 	 */
-	public function format($text)
+	private function cache($text, callable $callback)
 	{
-		if (empty($text)) {
-			return $text;
-		}
-
 		$cache = new \Nette\Caching\Cache($this->cacheStorage, $this->namespace);
 
 		// Nette Cache itself generates the key by hashing the key passed in load() so we can use whatever we want
-		$formatted = $cache->load($text, function() use ($text) {
+		$formatted = $cache->load($text, $callback);
+		return \Nette\Utils\Html::el()->setHtml($formatted);
+	}
+
+
+	/**
+	 * Format string and strip surrounding P element.
+	 *
+	 * Suitable for "inline" strings like headers.
+	 *
+	 * @return \Nette\Utils\Html|false
+	 */
+	public function format($text)
+	{
+		return (empty($text) ? false : $this->cache("{$text}|" . __FUNCTION__, function() use ($text) {
 			$texy = $this->getTexy();
 			return preg_replace('~^\s*<p[^>]*>(.*)</p>\s*$~s', '$1', $texy->process($text));
-		});
-		return \Nette\Utils\Html::el()->setHtml($formatted);
+		}));
+	}
+
+
+	/**
+	 * Format string.
+	 *
+	 * @return \Nette\Utils\Html|false
+	 */
+	public function formatBlock($text)
+	{
+		return (empty($text) ? false : $this->cache("{$text}|" . __FUNCTION__, function() use ($text) {
+			return $this->getTexy()->process($text);
+		}));
 	}
 
 

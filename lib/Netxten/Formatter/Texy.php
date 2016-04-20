@@ -1,6 +1,9 @@
 <?php
 namespace Netxten\Formatter;
 
+/**
+ * Caching Texy formatter.
+ */
 class Texy
 {
 
@@ -17,6 +20,12 @@ class Texy
 	protected $cacheStorage;
 
 
+	/**
+	 * Constructor.
+	 *
+	 * @param \Nette\Caching\IStorage $cacheStorage
+	 * @param string $namespace
+	 */
 	public function __construct(\Nette\Caching\IStorage $cacheStorage, $namespace = self::DEFAULT_NAMESPACE)
 	{
 		$this->cacheStorage = $cacheStorage;
@@ -25,6 +34,8 @@ class Texy
 
 
 	/**
+	 * Create Texy object.
+	 *
 	 * @return \Texy\Texy
 	 */
 	protected function getTexy()
@@ -40,6 +51,8 @@ class Texy
 
 
 	/**
+	 * Add new event handler.
+	 *
 	 * @param string $event
 	 * @param callable $callback
 	 */
@@ -50,6 +63,8 @@ class Texy
 
 
 	/**
+	 * Cache formatted string.
+	 *
 	 * @var string
 	 * @var callable
 	 * @return \Nette\Utils\Html
@@ -69,6 +84,7 @@ class Texy
 	 *
 	 * Suitable for "inline" strings like headers.
 	 *
+	 * @param string $text Text to format
 	 * @return \Nette\Utils\Html|false
 	 */
 	public function format($text)
@@ -83,6 +99,7 @@ class Texy
 	/**
 	 * Format string.
 	 *
+	 * @param string $text Text to format
 	 * @return \Nette\Utils\Html|false
 	 */
 	public function formatBlock($text)

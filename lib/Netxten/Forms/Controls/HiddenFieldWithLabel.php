@@ -41,4 +41,16 @@ class HiddenFieldWithLabel extends \Nette\Forms\Controls\BaseControl
 	}
 
 
+	/**
+	 * Generates label's HTML element.
+	 * @param  string
+	 * @return Html|string
+	 */
+	public function getLabel($caption = null)
+	{
+		$label = parent::getLabel($caption);
+		unset($label->for);
+		return $label;
+	}
+
 }

@@ -9,7 +9,7 @@ namespace Netxten\Forms\Controls;
 class HiddenFieldWithLabel extends \Nette\Forms\Controls\BaseControl
 {
 
-	/** @param  Html|string field text */
+	/** @param  string field text */
 	protected $text;
 
 
@@ -34,9 +34,9 @@ class HiddenFieldWithLabel extends \Nette\Forms\Controls\BaseControl
 
 		$container = \Nette\Utils\Html::el();
 		if ($this->text !== null) {
-			$container->add($this->text);
+			$container->addText($this->text);
 		}
-		$container->add($input);
+		$container->addHtml($input);
 		return $container;
 	}
 

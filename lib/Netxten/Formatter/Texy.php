@@ -13,6 +13,9 @@ class Texy
 	/** @var string */
 	private $namespace;
 
+	/** @var boolean */
+	protected $cacheResult = true;
+
 	/** @var array $event => $callback */
 	private $handlers = array();
 
@@ -63,6 +66,30 @@ class Texy
 
 
 	/**
+	 * Disable formatter cache.
+	 *
+	 * @return static
+	 */
+	public function disableCache()
+	{
+		$this->cacheResult = false;
+		return $this;
+	}
+
+
+	/**
+	 * Enable formatter cache.
+	 *
+	 * @return static
+	 */
+	public function enableCache()
+	{
+		$this->cacheResult = true;
+		return $this;
+	}
+
+
+	/**
 	 * Cache formatted string.
 	 *
 	 * @var string
@@ -71,10 +98,13 @@ class Texy
 	 */
 	private function cache($text, callable $callback)
 	{
-		$cache = new \Nette\Caching\Cache($this->cacheStorage, $this->namespace);
-
-		// Nette Cache itself generates the key by hashing the key passed in load() so we can use whatever we want
-		$formatted = $cache->load($text, $callback);
+		if ($this->cacheResult) {
+			$cache = new \Nette\Caching\Cache($this->cacheStorage, $this->namespace);
+			// Nette Cache itself generates the key by hashing the key passed in load() so we can use whatever we want
+			$formatted = $cache->load($text, $callback);
+		} else {
+			$formatted = call_user_func($callback);
+		}
 		return \Nette\Utils\Html::el()->setHtml($formatted);
 	}
 

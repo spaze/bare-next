@@ -103,7 +103,7 @@ class Texy
 			// Nette Cache itself generates the key by hashing the key passed in load() so we can use whatever we want
 			$formatted = $cache->load($text, $callback);
 		} else {
-			$formatted = call_user_func($callback);
+			$formatted = $callback();
 		}
 		return \Nette\Utils\Html::el()->setHtml($formatted);
 	}

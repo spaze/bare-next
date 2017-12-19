@@ -1,7 +1,7 @@
 <?php
 namespace Netxten\Templating;
 
-class Helpers extends \Nette\Object
+class Helpers
 {
 
 	private $localDateSubstitution = array(

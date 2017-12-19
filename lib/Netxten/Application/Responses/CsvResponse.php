@@ -15,7 +15,7 @@ namespace Netxten\Application\Responses;
  * @property-read string $glue
  * @property-read string $contentType
  */
-class CsvResponse extends \Nette\Object implements \Nette\Application\IResponse
+class CsvResponse implements \Nette\Application\IResponse
 {
 
 	/** Never add quotes */

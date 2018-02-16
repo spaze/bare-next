@@ -115,11 +115,11 @@ class Texy
 	 * Suitable for "inline" strings like headers.
 	 *
 	 * @param string $text Text to format
-	 * @return \Nette\Utils\Html|false
+	 * @return \Nette\Utils\Html|null
 	 */
 	public function format($text)
 	{
-		return (empty($text) ? false : $this->cache("{$text}|" . __FUNCTION__, function() use ($text) {
+		return (empty($text) ? null : $this->cache("{$text}|" . __FUNCTION__, function() use ($text) {
 			$texy = $this->getTexy();
 			return preg_replace('~^\s*<p[^>]*>(.*)</p>\s*$~s', '$1', $texy->process($text));
 		}));
@@ -130,11 +130,11 @@ class Texy
 	 * Format string.
 	 *
 	 * @param string $text Text to format
-	 * @return \Nette\Utils\Html|false
+	 * @return \Nette\Utils\Html|null
 	 */
 	public function formatBlock($text)
 	{
-		return (empty($text) ? false : $this->cache("{$text}|" . __FUNCTION__, function() use ($text) {
+		return (empty($text) ? null : $this->cache("{$text}|" . __FUNCTION__, function() use ($text) {
 			return $this->getTexy()->process($text);
 		}));
 	}

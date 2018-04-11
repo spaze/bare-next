@@ -5,6 +5,7 @@ namespace Netxten\Templating;
 
 use DateTimeInterface;
 use IntlDateFormatter;
+use Kdyby\Translation\Translator;
 
 class Helpers
 {
@@ -104,6 +105,15 @@ class Helpers
 		],
 	];
 
+	/** @var Translator */
+	private $translator;
+
+
+	public function __construct(Translator $translator)
+	{
+		$this->translator = $translator;
+	}
+
 
 	public function loader(string $helper, ...$args): ?string
 	{
@@ -115,8 +125,12 @@ class Helpers
 	}
 
 
-	public function localDate(DateTimeInterface $start, string $locale, string $format, ?DateTimeInterface $end = null): string
+	public function localDate(DateTimeInterface $start, string $format, ?DateTimeInterface $end = null, ?string $locale = null): string
 	{
+		if ($locale === null) {
+			$locale = $this->translator->getDefaultLocale();
+		}
+
 		$formatter = new IntlDateFormatter($locale, IntlDateFormatter::NONE, IntlDateFormatter::NONE);
 		if ($end === null || $this->sameDates($start, $end, $format, self::NO_INTERVAL)) {
 			$result = $this->localDateNoInterval($formatter, $start, $locale, $format);

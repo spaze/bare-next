@@ -1,5 +1,10 @@
 <?php
+declare(strict_types = 1);
+
 namespace Netxten\Templating;
+
+use DateTimeInterface;
+use IntlDateFormatter;
 
 class Helpers
 {
@@ -100,7 +105,7 @@ class Helpers
 	];
 
 
-	public function loader($helper, ...$args)
+	public function loader(string $helper, ...$args): ?string
 	{
 		if (method_exists($this, $helper)) {
 			return $this->$helper(...$args);
@@ -110,9 +115,9 @@ class Helpers
 	}
 
 
-	public function localDate(\DateTimeInterface $start, $locale, $format, ?\DateTimeInterface $end = null)
+	public function localDate(DateTimeInterface $start, string $locale, string $format, ?DateTimeInterface $end = null): string
 	{
-		$formatter = new \IntlDateFormatter($locale, null, null);
+		$formatter = new IntlDateFormatter($locale, IntlDateFormatter::NONE, IntlDateFormatter::NONE);
 		if ($end === null || $this->sameDates($start, $end, $format, self::NO_INTERVAL)) {
 			$result = $this->localDateNoInterval($formatter, $start, $locale, $format);
 		} else {
@@ -136,20 +141,20 @@ class Helpers
 	}
 
 
-	private function localDateNoInterval(\IntlDateFormatter $formatter, \DateTimeInterface $start, $locale, $format)
+	private function localDateNoInterval(IntlDateFormatter $formatter, DateTimeInterface $start, string $locale, string $format): string
 	{
 		$formatter->setPattern($this->localDateFormat[$locale][$format][self::NO_INTERVAL]);
 		return $formatter->format($start);
 	}
 
 
-	private function sameDates(\DateTimeInterface $start, \DateTimeInterface $end, $format, $level)
+	private function sameDates(DateTimeInterface $start, DateTimeInterface $end, string $format, int $level): bool
 	{
 		return ($start->format($this->comparisonFormat[$format][$level]) === $end->format($this->comparisonFormat[$format][$level]));
 	}
 
 
-	public function count($a)
+	public function count(array $a): int
 	{
 		return count($a);
 	}

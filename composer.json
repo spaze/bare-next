@@ -1,7 +1,8 @@
 {
 	"name": "spaze/netxten",
 	"require": {
-		"php": ">= 7.0.0",
+		"php": ">= 7.1.0",
+		"ext-intl": "*",
 		"nette/application": "~2.3",
 		"nette/caching": "~2.3",
 		"nette/utils": "^2.3.10",

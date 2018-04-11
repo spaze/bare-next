@@ -4,28 +4,100 @@ namespace Netxten\Templating;
 class Helpers
 {
 
-	private $localDateSubstitution = array(
-		'%B' => '%m',
-	);
+	public const DATE_DAY = 'day';
+	public const DATE_MONTH = 'month';
 
-	private $localDateFormat = array(
-		'cs' => array(
-			'%m' => array(
-				'01' => 'leden',
-				'02' => 'únor',
-				'03' => 'březen',
-				'04' => 'duben',
-				'05' => 'květen',
-				'06' => 'červen',
-				'07' => 'červenec',
-				'08' => 'srpen',
-				'09' => 'září',
-				'10' => 'říjen',
-				'11' => 'listopad',
-				'12' => 'prosinec',
-			),
-		),
-	);
+	private const NO_INTERVAL = 1;
+	private const INTERVAL = 2;
+	private const INTERVAL_BOUNDARY = 3;
+	private const INTERVAL_BOUNDARIES = 4;
+
+	private const START = 1;
+	private const SEPARATOR = 2;
+	private const END = 3;
+
+	private $localDateFormat = [
+		'en_US' => [
+			self::DATE_DAY => [
+				self::NO_INTERVAL => 'MMMM d, y',
+				self::INTERVAL => [
+					self::START => 'MMMM d',
+					self::SEPARATOR => '–',
+					self::END => 'd, y',
+				],
+				self::INTERVAL_BOUNDARY => [
+					self::START => 'MMMM d',
+					self::SEPARATOR => ' – ',
+					self::END => 'MMMM d, y',
+				],
+				self::INTERVAL_BOUNDARIES => [
+					self::START => 'MMMM d, y',
+					self::SEPARATOR => ' – ',
+					self::END => 'MMMM d, y',
+				],
+			],
+			self::DATE_MONTH => [
+				self::NO_INTERVAL => 'MMMM y',
+				self::INTERVAL => [
+					self::START => 'MMMM',
+					self::SEPARATOR => '–',
+					self::END => 'MMMM y',
+				],
+				self::INTERVAL_BOUNDARY => [
+					self::START => 'MMMM y',
+					self::SEPARATOR => ' – ',
+					self::END => 'MMMM y',
+				],
+			],
+		],
+		// Date formats from http://prirucka.ujc.cas.cz/?id=810
+		'cs_CZ' => [
+			self::DATE_DAY => [
+				self::NO_INTERVAL => 'd. MMMM y',
+				self::INTERVAL => [
+					self::START => 'd.',
+					self::SEPARATOR => '–',
+					self::END => 'd. MMMM y',
+				],
+				self::INTERVAL_BOUNDARY => [
+					self::START => 'd. MMMM',
+					self::SEPARATOR => ' – ',
+					self::END => 'd. MMMM y',
+				],
+				self::INTERVAL_BOUNDARIES => [
+					self::START => 'd. MMMM y',
+					self::SEPARATOR => ' – ',
+					self::END => 'd. MMMM y',
+				],
+			],
+			self::DATE_MONTH => [
+				self::NO_INTERVAL => 'LLLL y',
+				self::INTERVAL => [
+					self::START => 'LLLL',
+					self::SEPARATOR => '–',
+					self::END => 'LLLL y',
+				],
+				self::INTERVAL_BOUNDARY => [
+					self::START => 'LLLL y',
+					self::SEPARATOR => ' – ',
+					self::END => 'LLLL y',
+				],
+			],
+		],
+	];
+
+	private $comparisonFormat = [
+		self::DATE_DAY => [
+			self::NO_INTERVAL => 'Ymd',
+			self::INTERVAL => 'Ym',
+			self::INTERVAL_BOUNDARY => 'Y',
+		],
+		self::DATE_MONTH => [
+			self::NO_INTERVAL => 'Ym',
+			self::INTERVAL => 'Y',
+			self::INTERVAL_BOUNDARY => null,
+		],
+	];
 
 
 	public function loader($helper, ...$args)
@@ -38,17 +110,42 @@ class Helpers
 	}
 
 
-	public function localDate($time, $language, $format = null)
+	public function localDate(\DateTimeInterface $start, $locale, $format, ?\DateTimeInterface $end = null)
 	{
-		$time = \Nette\Utils\DateTime::from($time);
+		$formatter = new \IntlDateFormatter($locale, null, null);
+		if ($end === null || $this->sameDates($start, $end, $format, self::NO_INTERVAL)) {
+			$result = $this->localDateNoInterval($formatter, $start, $locale, $format);
+		} else {
+			if ($this->sameDates($start, $end, $format, self::INTERVAL)) {
+				$key = self::INTERVAL;
+			} elseif (isset($this->comparisonFormat[$format][self::INTERVAL_BOUNDARY]) && !$this->sameDates($start, $end, $format, self::INTERVAL_BOUNDARY)) {
+				$key = self::INTERVAL_BOUNDARIES;
+			} else {
+				$key = self::INTERVAL_BOUNDARY;
+			}
 
-		$replace = array();
-		foreach ($this->localDateSubstitution as $key => $value) {
-			$substituted   = strftime($value, $time->format('U'));
-			$replace[$key] = str_replace('%', '%%', $this->localDateFormat[$language][$value][$substituted]);
+			$formatter->setPattern($this->localDateFormat[$locale][$format][$key][self::START]);
+			$result = $formatter->format($start);
+
+			$result .= $this->localDateFormat[$locale][$format][$key][self::SEPARATOR];
+
+			$formatter->setPattern($this->localDateFormat[$locale][$format][$key][self::END]);
+			$result .= $formatter->format($end);
 		}
+		return $result;
+	}
 
-		return \Latte\Runtime\Filters::date($time, strtr($format, $replace));
+
+	private function localDateNoInterval(\IntlDateFormatter $formatter, \DateTimeInterface $start, $locale, $format)
+	{
+		$formatter->setPattern($this->localDateFormat[$locale][$format][self::NO_INTERVAL]);
+		return $formatter->format($start);
+	}
+
+
+	private function sameDates(\DateTimeInterface $start, \DateTimeInterface $end, $format, $level)
+	{
+		return ($start->format($this->comparisonFormat[$format][$level]) === $end->format($this->comparisonFormat[$format][$level]));
 	}
 
 
@@ -56,6 +153,5 @@ class Helpers
 	{
 		return count($a);
 	}
-
 
 }

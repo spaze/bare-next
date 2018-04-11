@@ -125,7 +125,7 @@ class Helpers
 	}
 
 
-	public function localDate(DateTimeInterface $start, string $format, ?DateTimeInterface $end = null, ?string $locale = null): string
+	private function localeDate(DateTimeInterface $start, ?DateTimeInterface $end, string $format, ?string $locale): string
 	{
 		if ($locale === null) {
 			$locale = $this->translator->getDefaultLocale();
@@ -133,7 +133,8 @@ class Helpers
 
 		$formatter = new IntlDateFormatter($locale, IntlDateFormatter::NONE, IntlDateFormatter::NONE);
 		if ($end === null || $this->sameDates($start, $end, $format, self::NO_INTERVAL)) {
-			$result = $this->localDateNoInterval($formatter, $start, $locale, $format);
+			$formatter->setPattern($this->localDateFormat[$locale][$format][self::NO_INTERVAL]);
+			$result = $formatter->format($start);
 		} else {
 			if ($this->sameDates($start, $end, $format, self::INTERVAL)) {
 				$key = self::INTERVAL;
@@ -155,10 +156,27 @@ class Helpers
 	}
 
 
-	private function localDateNoInterval(IntlDateFormatter $formatter, DateTimeInterface $start, string $locale, string $format): string
+	public function localeDay(DateTimeInterface $date, ?string $locale = null): string
 	{
-		$formatter->setPattern($this->localDateFormat[$locale][$format][self::NO_INTERVAL]);
-		return $formatter->format($start);
+		return $this->localeDate($date, null, self::DATE_DAY, $locale);
+	}
+
+
+	public function localeMonth(DateTimeInterface $date, ?string $locale = null): string
+	{
+		return $this->localeDate($date, null, self::DATE_MONTH, $locale);
+	}
+
+
+	public function localeIntervalDay(DateTimeInterface $start, DateTimeInterface $end, ?string $locale = null): string
+	{
+		return $this->localeDate($start, $end, self::DATE_DAY, $locale);
+	}
+
+
+	public function localeIntervalMonth(DateTimeInterface $start, DateTimeInterface $end, ?string $locale = null): string
+	{
+		return $this->localeDate($start, $end, self::DATE_MONTH, $locale);
 	}
 
 

@@ -191,4 +191,10 @@ class Helpers
 		return count($a);
 	}
 
+
+	public function ifNull($var, $default): string
+	{
+		return ($var === null ? (string)$default : $var);
+	}
+
 }

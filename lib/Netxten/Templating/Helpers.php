@@ -115,7 +115,12 @@ class Helpers
 	}
 
 
-	public function loader(string $helper, ...$args): ?string
+	/**
+	 * @param string $helper
+	 * @param mixed $args
+	 * @return mixed
+	 */
+	public function loader(string $helper, ...$args)
 	{
 		if (method_exists($this, $helper)) {
 			return $this->$helper(...$args);

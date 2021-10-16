@@ -191,7 +191,7 @@ class Helpers
 
 	private function sameDates(DateTimeInterface $start, DateTimeInterface $end, string $format, int $level): bool
 	{
-		return ($start->format($this->comparisonFormat[$format][$level]) === $end->format($this->comparisonFormat[$format][$level]));
+		return isset($this->comparisonFormat[$format][$level]) && ($start->format($this->comparisonFormat[$format][$level]) === $end->format($this->comparisonFormat[$format][$level]));
 	}
 
 

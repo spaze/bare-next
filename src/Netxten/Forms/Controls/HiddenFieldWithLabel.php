@@ -51,10 +51,11 @@ class HiddenFieldWithLabel extends BaseControl
 	 * Generates label's HTML element.
 	 *
 	 * @param string|null $caption
-	 * @return Html|string
+	 * @return Html
 	 */
-	public function getLabel($caption = null): Html|string
+	public function getLabel($caption = null): Html
 	{
+		/** @var Html $label */
 		$label = parent::getLabel($caption);
 		unset($label->for);
 		return $label;

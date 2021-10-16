@@ -12,6 +12,6 @@
 		"texy/texy": "^3.0"
 	},
 	"autoload": {
-		"psr-0": {"Netxten": "lib"}
+		"psr-0": {"Netxten": "src"}
 	}
 }

@@ -1,5 +1,7 @@
 {
 	"name": "spaze/netxten",
+	"description": "Various Nette Framework extension services",
+	"license": "MIT",
 	"require": {
 		"php": "^8.0",
 		"ext-intl": "*",

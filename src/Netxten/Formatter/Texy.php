@@ -3,7 +3,10 @@ declare(strict_types = 1);
 
 namespace Netxten\Formatter;
 
-use \Nette\Utils\Html;
+use Nette\Caching\Cache;
+use Nette\Caching\Storage;
+use Nette\Utils\Html;
+use Throwable;
 
 /**
  * Caching Texy formatter.
@@ -12,22 +15,19 @@ class Texy
 {
 
 	/** @var string */
-	const DEFAULT_NAMESPACE = 'TexyFormatted';
+	public const DEFAULT_NAMESPACE = 'TexyFormatted';
 
-	/** @var string */
-	private $namespace;
+	private string $namespace;
 
-	/** @var boolean */
-	protected $cacheResult = true;
+	protected bool $cacheResult = true;
 
-	/** @var array $event => $callback */
-	private $handlers = array();
+	/** @var array<string, callable> */
+	private array $handlers = [];
 
-	/** @var Nette\Caching\IStorage */
-	protected $cacheStorage;
+	protected Storage $cacheStorage;
 
 
-	public function __construct(\Nette\Caching\Storage $cacheStorage, string $namespace = self::DEFAULT_NAMESPACE)
+	public function __construct(Storage $cacheStorage, string $namespace = self::DEFAULT_NAMESPACE)
 	{
 		$this->cacheStorage = $cacheStorage;
 		$this->namespace = $namespace;
@@ -89,14 +89,15 @@ class Texy
 	/**
 	 * Cache formatted string.
 	 *
-	 * @var string $text
-	 * @var callable $callback
+	 * @param string $text
+	 * @param callable $callback
 	 * @return Html
+	 * @throws Throwable
 	 */
 	private function cache(string $text, callable $callback): Html
 	{
 		if ($this->cacheResult) {
-			$cache = new \Nette\Caching\Cache($this->cacheStorage, $this->namespace);
+			$cache = new Cache($this->cacheStorage, $this->namespace);
 			// Nette Cache itself generates the key by hashing the key passed in load() so we can use whatever we want
 			$formatted = $cache->load($text, $callback);
 		} else {
@@ -114,10 +115,11 @@ class Texy
 	 * @param string|null $text Text to format
 	 * @param \Texy\Texy|null $texy
 	 * @return Html|null
+	 * @throws Throwable
 	 */
 	public function format(?string $text, ?\Texy\Texy $texy = null): ?Html
 	{
-		return (empty($text) ? null : $this->cache("{$text}|" . __FUNCTION__, function() use ($text, $texy) {
+		return (empty($text) ? null : $this->cache("{$text}|" . __FUNCTION__, function () use ($text, $texy) {
 			return preg_replace('~^\s*<p[^>]*>(.*)</p>\s*$~s', '$1', ($texy ?? $this->getTexy())->process($text));
 		}));
 	}
@@ -129,10 +131,11 @@ class Texy
 	 * @param string|null $text Text to format
 	 * @param \Texy\Texy|null $texy
 	 * @return Html|null
+	 * @throws Throwable
 	 */
 	public function formatBlock(?string $text, ?\Texy\Texy $texy = null): ?Html
 	{
-		return (empty($text) ? null : $this->cache("{$text}|" . __FUNCTION__, function() use ($text, $texy) {
+		return (empty($text) ? null : $this->cache("{$text}|" . __FUNCTION__, function () use ($text, $texy) {
 			return ($texy ?? $this->getTexy())->process($text);
 		}));
 	}

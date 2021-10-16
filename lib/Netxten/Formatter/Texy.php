@@ -27,13 +27,7 @@ class Texy
 	protected $cacheStorage;
 
 
-	/**
-	 * Constructor.
-	 *
-	 * @param \Nette\Caching\IStorage $cacheStorage
-	 * @param string $namespace
-	 */
-	public function __construct(\Nette\Caching\IStorage $cacheStorage, string $namespace = self::DEFAULT_NAMESPACE)
+	public function __construct(\Nette\Caching\Storage $cacheStorage, string $namespace = self::DEFAULT_NAMESPACE)
 	{
 		$this->cacheStorage = $cacheStorage;
 		$this->namespace = $namespace;

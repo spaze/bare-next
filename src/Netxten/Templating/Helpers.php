@@ -113,18 +113,10 @@ class Helpers
 	}
 
 
-	/**
-	 * @param string $helper
-	 * @param mixed $args
-	 * @return mixed
-	 */
-	public function loader(string $helper, ...$args): mixed
+	public function loader(string $filter): ?callable
 	{
-		if (method_exists($this, $helper)) {
-			return $this->$helper(...$args);
-		} else {
-			return null;
-		}
+		$callback = [$this, $filter];
+		return is_callable($callback) ? $callback : null;
 	}
 
 

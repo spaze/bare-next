@@ -7,7 +7,7 @@ use DateTimeInterface;
 use IntlDateFormatter;
 use RuntimeException;
 
-class Helpers
+class DateFilters
 {
 
 	public const DATE_DAY = 'day';
@@ -184,22 +184,6 @@ class Helpers
 	private function sameDates(DateTimeInterface $start, DateTimeInterface $end, string $format, int $level): bool
 	{
 		return isset($this->comparisonFormat[$format][$level]) && ($start->format($this->comparisonFormat[$format][$level]) === $end->format($this->comparisonFormat[$format][$level]));
-	}
-
-
-	/**
-	 * @param array<int|string, mixed> $a
-	 * @return int
-	 */
-	public function count(array $a): int
-	{
-		return count($a);
-	}
-
-
-	public function ifNull(mixed $var, string|int $default): string
-	{
-		return ($var === null ? (string)$default : $var);
 	}
 
 }

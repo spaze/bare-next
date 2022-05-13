@@ -186,20 +186,4 @@ class Helpers
 		return isset($this->comparisonFormat[$format][$level]) && ($start->format($this->comparisonFormat[$format][$level]) === $end->format($this->comparisonFormat[$format][$level]));
 	}
 
-
-	/**
-	 * @param array<int|string, mixed> $a
-	 * @return int
-	 */
-	public function count(array $a): int
-	{
-		return count($a);
-	}
-
-
-	public function ifNull(mixed $var, string|int $default): string
-	{
-		return ($var === null ? (string)$default : $var);
-	}
-
 }

@@ -7,7 +7,7 @@ use DateTimeInterface;
 use IntlDateFormatter;
 use RuntimeException;
 
-class Helpers
+class DateFilters
 {
 
 	public const DATE_DAY = 'day';

@@ -14,23 +14,16 @@ use Throwable;
 class Texy
 {
 
-	/** @var string */
 	public const DEFAULT_NAMESPACE = 'TexyFormatted';
-
-	private string $namespace;
 
 	protected bool $cacheResult = true;
 
 	/** @var array<string, callable> */
 	private array $handlers = [];
 
-	protected Storage $cacheStorage;
 
-
-	public function __construct(Storage $cacheStorage, string $namespace = self::DEFAULT_NAMESPACE)
+	public function __construct(private Storage $cacheStorage, private string $namespace = self::DEFAULT_NAMESPACE)
 	{
-		$this->cacheStorage = $cacheStorage;
-		$this->namespace = $namespace;
 	}
 
 
